@@ -1,0 +1,37 @@
+---
+title: "Worldwide Food Production"
+output: html_notebook
+---
+
+This is a dataset of worldwide food production. 
+https://www.kaggle.com/dorbicycle/world-foodfeed-production
+
+The goal of this report will be to analyze how food production has changed over time. I am particularly interested in newly-industrialized countries, which have not yet attained developed status, but are developing very fast compared to other states.
+https://en.wikipedia.org/wiki/Newly_industrialized_country
+
+First, I will produce a world map of how worldwide wheat production has changed over time.
+
+```{r echo=TRUE, include=FALSE}
+library(tidyverse)
+library(leaflet)
+library(rworldmap)
+
+##load data
+load(file = "food.rdata")
+
+wheat <- filter(food, Item == "Wheat and products", Element == "Food")
+
+wheat1970 <- filter(wheat, Year == 1970)
+wheat1990 <- filter(wheat, Year == 1990)
+
+##match data to country
+matched <- joinCountryData2Map(wheat1970, joinCode = "ISO3", nameJoinColumn = "Area.Abbreviation")
+matched2 <- joinCountryData2Map(wheat1990, joinCode = "ISO3", nameJoinColumn = "Area.Abbreviation")
+```
+
+```{r}
+mapCountryData(matched, nameColumnToPlot="Amount", mapTitle="Worldwide Production of Wheat in 1970", catMethod = "pretty", colourPalette = "heat")
+
+mapCountryData(matched2, nameColumnToPlot="Amount", mapTitle="Worldwide Production of Wheat in 1990", catMethod = "pretty", colourPalette = "heat")
+```
+

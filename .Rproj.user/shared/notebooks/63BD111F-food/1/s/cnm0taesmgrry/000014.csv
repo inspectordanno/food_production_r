@@ -1,0 +1,38 @@
+"0","library(tidyverse)"
+"0","library(leaflet)"
+"0","library(rworldmap)"
+"0","##load data"
+"0","load(file = ""food.rdata"")"
+"0","wheat <- filter(food, Item == ""Wheat and products"", Element == ""Food"")"
+"0","wheat1970 <- filter(wheat, Year == 1970)"
+"0","wheat1990 <- filter(wheat, Year == 1990)"
+"0","##match data to country"
+"0","matched <- joinCountryData2Map(wheat1970, joinCode = ""ISO3"", nameJoinColumn = ""Area.Abbreviation"")"
+"1","174"
+"1"," "
+"1","codes from your data successfully matched countries in the map
+"
+"1","0"
+"1"," "
+"1","codes from your data failed to match with a country code in the map
+"
+"1","74"
+"1"," "
+"1","codes from the map weren't represented in your data
+"
+"0","matched2 <- joinCountryData2Map(wheat1990, joinCode = ""ISO3"", nameJoinColumn = ""Area.Abbreviation"")"
+"1","174"
+"1"," "
+"1","codes from your data successfully matched countries in the map
+"
+"1","0"
+"1"," "
+"1","codes from your data failed to match with a country code in the map
+"
+"1","74"
+"1"," "
+"1","codes from the map weren't represented in your data
+"
+"0","mapCountryData(matched, nameColumnToPlot=""Amount"", mapTitle=""Worldwide Production of Wheat in 1970"", catMethod = ""pretty"", colourPalette = ""heat"")"
+"2","You asked for 7 categories, 5 were used due to pretty() classification
+"

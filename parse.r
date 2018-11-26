@@ -9,5 +9,11 @@ tmp$Year <- substr(tmp$Year,2,5)
 
 food <- select(tmp, Area, Area.Abbreviation, Item, Element, Year, Amount)
 food$Year <- as.numeric(food$Year)
-save(food,file = "food.rdata")
 
+sel <- c("ZAF","AFG", "SFB", "PAK", "PER", "USA", "GBR")
+
+dat <- food[food$Area.Abbreviation %in% sel,]
+
+library(dplyr)
+sample <- filter(food, Area.Abbreviation == sel)
+save(food,file = "food.rdata")

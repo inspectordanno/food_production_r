@@ -24,14 +24,25 @@ wheat <- filter(food, Item == "Wheat and products", Element == "Food")
 wheat1970 <- filter(wheat, Year == 1970)
 wheat1990 <- filter(wheat, Year == 1990)
 
-##match data to country
-matched <- joinCountryData2Map(wheat1970, joinCode = "ISO3", nameJoinColumn = "Area.Abbreviation")
-matched2 <- joinCountryData2Map(wheat1990, joinCode = "ISO3", nameJoinColumn = "Area.Abbreviation")
 ```
 
 ```{r}
-mapCountryData(matched, nameColumnToPlot="Amount", mapTitle="Worldwide Production of Wheat in 1970", catMethod = "pretty", colourPalette = "heat")
-
-mapCountryData(matched2, nameColumnToPlot="Amount", mapTitle="Worldwide Production of Wheat in 1990", catMethod = "pretty", colourPalette = "heat")
+ggplot(dat[dat$Item=="Wheat and products",]) + geom_line(aes(x = Year, y = Amount, color = Element)) + facet_wrap(~Area)
 ```
 
+normalize countries by population
+explore foods with large outputs
+make a map just to provide context
+
+
+
+```{r}
+##mapCountryData(matched, nameColumnToPlot="Amount", mapTitle="Worldwide Production of Wheat in 1970", catMethod = "pretty", colourPalette = "heat")
+
+##mapCountryData(matched2, nameColumnToPlot="Amount", mapTitle="Worldwide Production of Wheat in 1990", catMethod = "pretty", colourPalette = "heat")
+
+##match data to country
+##matched <- joinCountryData2Map(wheat1970, joinCode = "ISO3", nameJoinColumn = "Area.Abbreviation")
+##matched2 <- joinCountryData2Map(wheat1990, joinCode = "ISO3", nameJoinColumn = "Area.Abbreviation")
+
+```

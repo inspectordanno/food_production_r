@@ -1,8 +1,10 @@
 library(tidyverse)
+library(rgdal)
+load("food.rdata")
+
+##parsing data
 
 food_data <- read.csv('food.csv', stringsAsFactors = F)
-
-tst <- food_data[1:100,]
 
 tmp <- gather(food_data, key = Year, value = Amount, 11:63)
 tmp$Year <- substr(tmp$Year,2,5)
@@ -10,10 +12,33 @@ tmp$Year <- substr(tmp$Year,2,5)
 food <- select(tmp, Area, Area.Abbreviation, Item, Element, Year, Amount)
 food$Year <- as.numeric(food$Year)
 
-sel <- c("ZAF","AFG", "SFB", "PAK", "PER", "USA", "GBR")
+#save(food,file = "food.rdata")
 
-dat <- food[food$Area.Abbreviation %in% sel,]
+#dat <- food[food$Area.Abbreviation %in% countrySelection,]
 
-library(dplyr)
-sample <- filter(food, Area.Abbreviation == sel)
-save(food,file = "food.rdata")
+##map
+map <-  readOGR(dsn = "shapefiles", layer = "ne_50m_admin_0_countries")
+dat.s <- select(map@data,POP_EST,GU_A3,SU_A3, CONTINENT, REGION_UN, SUBREGION, REGION_WB) 
+dat.s$pop <- as.numeric(as.character(dat.s$POP_EST))
+#save(dat.s,file= "countries.rdata")
+
+large <- dat.s[dat.s$pop>10000000,]
+
+
+countriesbyFood <- merge(dat.s,food, by.y = "Area.Abbreviation", by.x= "GU_A3")
+countriesbyFood$Year <- as.numeric(countriesbyFood$Year)
+save(countriesbyFood,file= "countriesbyFood.rdata")
+
+t <- table(countriesbyFood$Item, countriesbyFood$Element)
+
+tx <-  as.data.frame(t)
+v <-  t[,1]!=0
+t2 <- t[v,]
+t3 <- rownames(t2)
+t3
+countriesbyFood <- countriesbyFood[countriesbyFood$Item %in% t3, ]
+
+ggplot(mergedData[mergedData$Item=="Wheat and products",]) + geom_line(aes(color = Element, x = Year, y = Amount)) + facet_wrap(~Area)
+
+wheatFood <- filter(food, Item == "Wheat and products", Element == "Food", Year == "1990")
+wheatFeed <- filter(food, Item == "Wheat and products", Element == "Feed", Year == "1990")

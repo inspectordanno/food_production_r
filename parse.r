@@ -19,7 +19,7 @@ food$Year <- as.numeric(food$Year)
 ##map
 map <-  readOGR(dsn = "shapefiles", layer = "ne_50m_admin_0_countries")
 dat.s <- select(map@data,POP_EST,GU_A3,SU_A3, CONTINENT, REGION_UN, SUBREGION, REGION_WB)
-income <- select(map@data, INCOME_GRP, GU_A3)
+income <- select(map@data, INCOME_GRP, GU_A3, NAME)
 income$INCOME_GRP <- as.numeric(income$INCOME_GRP)
 
 dat.s$pop <- as.numeric(as.character(dat.s$POP_EST))

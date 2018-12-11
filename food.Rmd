@@ -56,4 +56,50 @@ ggplot(countriesbyFood[countriesbyFood$Item=="Wheat and products" & countriesbyF
 ```
 Similar to the divide between small and large nations, it is evident that rich countries produce feed and food, and poor countries produce only food. However, while rich countries production of food has remained flat over the past 50 years, nearly all poor countries have had a notable increase in production.
 
+###Correlation between feed and food
 
+Now, I will test if there is a correlation between feed, food, and GDP.
+
+```{r}
+load('countryRatios.rdata')
+countryRatios <- countryRatios[countryRatios$Food < 20000000,]##this filters out three outliers
+ggplot(countryRatios, aes(x=Food, y=Feed)) + geom_point() + geom_smooth() + geom_jitter()
+```
+There appears to be a positive correlation between food and feed.
+
+```{r}
+cor.test(countryRatios$Food, countryRatios$Feed)
+```
+The correlation test shows that there is a statistically significant correlation between food and feed. The correlation coefficient is .79, which suggests a strong positive correlation.
+
+###Correlation between Food and GDP
+
+```{r}
+ggplot(countryRatios, aes(x=Food, y=GDP_MD_EST)) + geom_point() + geom_smooth() + geom_jitter()
+```
+This graph looks eerily similar to the previous food vs. feed example!
+Now let's test the correlation.
+```{r}
+cor.test(countryRatios$Food, countryRatios$GDP_MD_EST)
+```
+This time, there is a statistically significant correlation, and an even higher coefficient: 0.89.
+
+###Correlation between Feed and GDP
+
+```{r}
+ggplot(countryRatios, aes(x=Feed, y=GDP_MD_EST)) + geom_point() + geom_smooth() + geom_jitter()
+```
+Again, a positive correlation, but it seems weaker.
+
+```{r}
+cor.test(countryRatios$Feed, countryRatios$GDP_MD_EST)
+```
+The correlation between Feed and GDP is less than that of Food and GDP.
+
+###Conclusions
+
+Large countries produce more feed than smaller countries, and richer countries produce more feed than poorer ones.
+
+Rich countries produce a large amount of food, but the variability has remained small over time. Poor countries have been producing an increasingly greater amount of food over the past 50 years.
+
+Food, Feed, and GDP are all highly correlated. Amount of food produced is very highly correlated with GDP.

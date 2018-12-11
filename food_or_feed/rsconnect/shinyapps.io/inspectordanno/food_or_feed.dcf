@@ -1,0 +1,12 @@
+name: food_or_feed
+title: food_or_feed
+username:
+account: inspectordanno
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 613403
+bundleId: 1754729
+url: https://inspectordanno.shinyapps.io/food_or_feed/
+when: 1544502816.15973
+asMultiple: FALSE
+asStatic: FALSE

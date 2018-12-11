@@ -2,7 +2,7 @@ library(shiny)
 library(tidyverse)
 
 ##load food data
-load(file = "../countriesbyFood.rdata")
+load(file = "countriesbyFood.rdata")
 
 # Define UI
 ui <- fluidPage(
@@ -15,8 +15,8 @@ ui <- fluidPage(
       sidebarPanel(
          selectInput(inputId= "Region",
                      label= strong("Region"),
-                     choices = unique(countriesbyFood$SUBREGION),
-                     selected = countriesbyFood$SUBREGION[1]),
+                     choices = unique(countriesbyFood$CONTINENT),
+                     selected = countriesbyFood$CONTINENT[1]),
          
          selectInput(inputId= "Food",
                      label= strong("Food Item"),
@@ -45,7 +45,7 @@ server <- function(input, output) {
      Region <- input$Region
      log <- input$Scale
      
-     tmpServer <- countriesbyFood[countriesbyFood$Item==Food & countriesbyFood$SUBREGION==Region,]
+     tmpServer <- countriesbyFood[countriesbyFood$Item==Food & countriesbyFood$CONTINENT==Region,]
      g <- ggplot(tmpServer) + geom_line(aes(color = Element, x = Year, y = Amount)) + facet_wrap(~Area)
      
      if (log == "Logarithmic") {g + scale_y_log10()} else {g}

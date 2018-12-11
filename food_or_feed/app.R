@@ -4,7 +4,7 @@ library(tidyverse)
 ##load food data
 load(file = "../countriesbyFood.rdata")
 
-# Define UI for application that draws a histogram
+# Define UI
 ui <- fluidPage(
    
    # Application title

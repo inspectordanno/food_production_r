@@ -18,7 +18,10 @@ food$Year <- as.numeric(food$Year)
 
 ##map
 map <-  readOGR(dsn = "shapefiles", layer = "ne_50m_admin_0_countries")
-dat.s <- select(map@data,POP_EST,GU_A3,SU_A3, CONTINENT, REGION_UN, SUBREGION, REGION_WB) 
+dat.s <- select(map@data,POP_EST,GU_A3,SU_A3, CONTINENT, REGION_UN, SUBREGION, REGION_WB)
+income <- select(map@data, INCOME_GRP, GU_A3)
+income$INCOME_GRP <- as.numeric(income$INCOME_GRP)
+
 dat.s$pop <- as.numeric(as.character(dat.s$POP_EST))
 #save(dat.s,file= "countries.rdata")
 
@@ -27,6 +30,8 @@ large <- dat.s[dat.s$pop>10000000,]
 
 countriesbyFood <- merge(dat.s,food, by.y = "Area.Abbreviation", by.x= "GU_A3")
 countriesbyFood$Year <- as.numeric(countriesbyFood$Year)
+
+countriesbyFood <- merge(countriesbyFood, income, by.x = "GU_A3", by.y = "GU_A3")
 save(countriesbyFood,file= "countriesbyFood.rdata")
 
 t <- table(countriesbyFood$Item, countriesbyFood$Element)

@@ -6,6 +6,8 @@ output: html_notebook
 This is a dataset of worldwide food production. The data compares "food", which is consumed by humans, with "feed", which is comnsumed by livestock.
 https://www.kaggle.com/dorbicycle/world-foodfeed-production
 
+###Research Goal
+
 The goal of this report will be to analyze how food production has changed over time. I am particularly interested in investigating comparing small vs. large countries, and rich vs. poor countries, to see how the food and feed distributions match up. The scales are log10 to normalize for population.
 
 ```{r echo=TRUE, include=FALSE}
@@ -23,7 +25,8 @@ Here I will compare the distribution of food vs. feed for wheat in small countri
 ggplot(countriesbyFood[countriesbyFood$Item=="Wheat and products" & countriesbyFood$pop < 5000000,]) +
   geom_line(aes(x = Year, y=Amount, color=Element)) +
   scale_y_log10() +
-  facet_wrap(~Area)
+  facet_wrap(~Area) +
+  theme(axis.text=element_text(size=5))
 ```
 
 
@@ -32,7 +35,8 @@ Next is the distribution of food vs. food for wheat in large countries.
 ggplot(countriesbyFood[countriesbyFood$Item=="Wheat and products" & countriesbyFood$pop > 25000000,]) +
   geom_line(aes(x = Year, y=Amount, color=Element)) +
   scale_y_log10() +
-  facet_wrap(~Area)
+  facet_wrap(~Area) +
+  theme(axis.text=element_text(size=5))
 ```
 It is clear that large countries produce more feed overall. For both large and small countries, feed production is more variable than food production.
 
@@ -44,7 +48,8 @@ Here is the distribution for rich countries:
 ggplot(countriesbyFood[countriesbyFood$Item=="Wheat and products" & countriesbyFood$INCOME_GRP == 1,]) +
   geom_line(aes(x = Year, y=Amount, color=Element)) +
   scale_y_log10() +
-  facet_wrap(~Area)
+  facet_wrap(~Area) +
+  theme(axis.text=element_text(size=5))
 ```
 Here are the poor countries:
 
@@ -52,7 +57,8 @@ Here are the poor countries:
 ggplot(countriesbyFood[countriesbyFood$Item=="Wheat and products" & countriesbyFood$INCOME_GRP == 5,]) +
   geom_line(aes(x = Year, y=Amount, color=Element)) +
   scale_y_log10() +
-  facet_wrap(~Area)
+  facet_wrap(~Area) +
+  theme(axis.text=element_text(size=5))
 ```
 Similar to the divide between small and large nations, it is evident that rich countries produce feed and food, and poor countries produce only food. However, while rich countries production of food has remained flat over the past 50 years, nearly all poor countries have had a notable increase in production.
 
@@ -63,9 +69,9 @@ Now, I will test if there is a correlation between feed, food, and GDP.
 ```{r}
 load('countryRatios.rdata')
 countryRatios <- countryRatios[countryRatios$Food < 20000000,]##this filters out three outliers
-ggplot(countryRatios, aes(x=Food, y=Feed)) + geom_point() + geom_smooth() + geom_jitter()
+ggplot(countryRatios, aes(x=Food, y=Feed, color=INCOME_GRP)) + geom_point() + geom_smooth() + geom_jitter()
 ```
-There appears to be a positive correlation between food and feed.
+There appears to be a positive correlation between food and feed. Rich countries produce more of each than poor countries.
 
 ```{r}
 cor.test(countryRatios$Food, countryRatios$Feed)
@@ -98,7 +104,7 @@ The correlation between Feed and GDP is less than that of Food and GDP.
 
 ###Conclusions
 
-Large countries produce more feed than smaller countries, and richer countries produce more feed than poorer ones.
+Production of food is strongly correlated with feed. Both food and feed are strongly correlated with GDP.
 
 Rich countries produce a large amount of food, but the variability has remained small over time. Poor countries have been producing an increasingly greater amount of food over the past 50 years.
 
